@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.67dd9cf8.chunk.css",
+    "main.js": "/static/js/main.2bd3b8cd.chunk.js",
+    "main.js.map": "/static/js/main.2bd3b8cd.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.f5961303.js",
+    "runtime-main.js.map": "/static/js/runtime-main.f5961303.js.map",
+    "static/css/2.4ca0dccb.chunk.css": "/static/css/2.4ca0dccb.chunk.css",
+    "static/js/2.efd95c01.chunk.js": "/static/js/2.efd95c01.chunk.js",
+    "static/js/2.efd95c01.chunk.js.map": "/static/js/2.efd95c01.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.4ca0dccb.chunk.css.map": "/static/css/2.4ca0dccb.chunk.css.map",
+    "static/css/main.67dd9cf8.chunk.css.map": "/static/css/main.67dd9cf8.chunk.css.map",
+    "static/js/2.efd95c01.chunk.js.LICENSE.txt": "/static/js/2.efd95c01.chunk.js.LICENSE.txt",
+    "static/media/bmw-3-0-csl-mi-05.jpg": "/static/media/bmw-3-0-csl-mi-05.a39d7e79.jpg",
+    "static/media/bootstrap.jpg": "/static/media/bootstrap.bd712487.jpg",
+    "static/media/all.min.css": "/static/media/fa-solid-900.efbd5d20.eot",
+    "static/media/logo5.ae9ba86c.png": "/static/media/logo5.ae9ba86c.png",
+    "static/media/team-1-800x800.jpg": "/static/media/team-1-800x800.fa5a7ac2.jpg",
+    "static/media/team-2-800x800.jpg": "/static/media/team-2-800x800.3e08ef14.jpg",
+    "static/media/team-3-800x800.jpg": "/static/media/team-3-800x800.19201574.jpg",
+    "static/media/team-4-470x470.png": "/static/media/team-4-470x470.4ef82ef4.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f5961303.js",
+    "static/css/2.4ca0dccb.chunk.css",
+    "static/js/2.efd95c01.chunk.js",
+    "static/css/main.67dd9cf8.chunk.css",
+    "static/js/main.2bd3b8cd.chunk.js"
+  ]
+}
