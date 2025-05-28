@@ -2,7 +2,7 @@ import React from "react";
 import { createPopper } from "@popperjs/core";
 
 const UserDropdown = () => {
-  // dropdown props
+
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
@@ -50,7 +50,7 @@ const UserDropdown = () => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Action
+       
         </a>
         <a
           href="#pablo"
@@ -59,8 +59,7 @@ const UserDropdown = () => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Another action
-        </a>
+            </a>
         <a
           href="#pablo"
           className={
@@ -68,7 +67,7 @@ const UserDropdown = () => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Something else here
+      
         </a>
         <div className="h-0 my-2 border border-solid border-blueGray-100" />
         <a
@@ -78,7 +77,7 @@ const UserDropdown = () => {
           }
           onClick={(e) => e.preventDefault()}
         >
-          Seprated link
+       
         </a>
       </div>
     </>

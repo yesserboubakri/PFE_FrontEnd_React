@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
 
 const PagesDropdown = () => {
-  // dropdown props
+  // props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
@@ -27,7 +27,7 @@ const PagesDropdown = () => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        Demo Pages
+
       </a>
       <div
         ref={popoverDropdownRef}
@@ -123,7 +123,6 @@ const PagesDropdown = () => {
         >
           Profile
         </Link>
-        
 
         <Link
           to="/Annonces"

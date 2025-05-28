@@ -1,48 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
+import axios from "axios";
+import { getCarCountByDay } from "../../services/ApiDashbored"; 
+import { getUserCountByDay } from "../../services/ApiDashbored"; 
+
 
 export default function CardLineChart() {
-  React.useEffect(() => {
-    var config = {
+  const [days, setDays] = useState([]);
+  const [carCounts, setCarCounts] = useState([]);
+  const [userCounts, setUserCounts] = useState([]);
+
+useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const carRes = await getCarCountByDay();
+      const userRes = await getUserCountByDay();
+
+      const dayLabels = carRes.map(item => item.day);  
+      const carData = carRes.map(item => item.count);
+      const userData = userRes.map(item => item.count);
+
+      setDays(dayLabels);
+      setCarCounts(carData);
+      setUserCounts(userData);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données:", error);
+    }
+  };
+
+  fetchStats();
+}, []);
+
+
+  useEffect(() => {
+    if (days.length === 0 || carCounts.length === 0 || userCounts.length === 0) return;
+
+    const config = {
       type: "line",
       data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+        labels: days,
         datasets: [
           {
-            label: new Date().getFullYear(),
-            backgroundColor: "#4c51bf",
-            borderColor: "#4c51bf",
-            data: [65, 78, 66, 44, 56, 67, 75],
+            label: "Voitures ajoutées",
+            backgroundColor: "transparent",
+            borderColor: "#000000", //ak7el
+            data: carCounts,
             fill: false,
+            borderWidth: 2,
           },
           {
-            label: new Date().getFullYear() - 1,
+            label: "Utilisateurs ajoutés",
             fill: false,
-            backgroundColor: "#fff",
-            borderColor: "#fff",
-            data: [40, 68, 86, 74, 56, 60, 87],
+            backgroundColor: "transparent",
+            borderColor: "#b91c1c", //a7mer
+            data: userCounts,
+            borderWidth: 2,
           },
         ],
       },
       options: {
         maintainAspectRatio: false,
         responsive: true,
-        title: {
-          display: false,
-          text: "Sales Charts",
-          fontColor: "white",
-        },
         legend: {
           labels: {
-            fontColor: "white",
+            fontColor: "#000000", 
           },
           align: "end",
           position: "bottom",
@@ -59,73 +80,80 @@ export default function CardLineChart() {
           xAxes: [
             {
               ticks: {
-                fontColor: "rgba(255,255,255,.7)",
+                fontColor: "#000000", 
+                maxRotation: 45,
+                minRotation: 45,
               },
               display: true,
               scaleLabel: {
-                display: false,
-                labelString: "Month",
-                fontColor: "white",
+                display: true,
+                labelString: "Jours",
+                fontColor: "#000000", 
               },
               gridLines: {
                 display: false,
-                borderDash: [2],
-                borderDashOffset: [2],
-                color: "rgba(33, 37, 41, 0.3)",
-                zeroLineColor: "rgba(0, 0, 0, 0)",
-                zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
+                color: "rgba(0,0,0,0.1)",
               },
             },
           ],
           yAxes: [
             {
               ticks: {
-                fontColor: "rgba(255,255,255,.7)",
+                fontColor: "#000000", 
+                beginAtZero: true,
+                precision: 0,
               },
               display: true,
               scaleLabel: {
-                display: false,
-                labelString: "Value",
-                fontColor: "white",
+                display: true,
+                labelString: "Nombre",
+                fontColor: "#000000", //ak7el
               },
               gridLines: {
                 borderDash: [3],
                 borderDashOffset: [3],
                 drawBorder: false,
-                color: "rgba(255, 255, 255, 0.15)",
-                zeroLineColor: "rgba(33, 37, 41, 0)",
-                zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
+                color: "rgba(0, 0, 0, 0.1)",
               },
             },
           ],
         },
+        layout: {
+          padding: {
+            top: 10,
+            bottom: 10,
+          },
+        },
       },
     };
-    var ctx = document.getElementById("line-chart").getContext("2d");
+
+    const ctx = document.getElementById("line-chart").getContext("2d");
+    if (window.myLine) window.myLine.destroy();
     window.myLine = new Chart(ctx, config);
-  }, []);
-  return (
-    <>
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700">
-        <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
-          <div className="flex flex-wrap items-center">
-            <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
-                Overview
-              </h6>
-              <h2 className="text-white text-xl font-semibold">Sales value</h2>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 flex-auto">
-          {/* Chart */}
-          <div className="relative h-350-px">
-            <canvas id="line-chart"></canvas>
-          </div>
+  }, [days, carCounts, userCounts]);
+return (
+  <div
+    className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded"
+    style={{ backgroundColor: "#dee2e6" }}
+  >
+    <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
+      <div className="flex flex-wrap items-center">
+        <div className="relative w-full max-w-full flex-grow flex-1">
+          <h6 className="uppercase text-gray-900 mb-1 text-xs font-semibold">
+            Statistiques
+          </h6>
+          <h2 className="text-gray-900 text-xl font-semibold">
+            Voitures & utilisateurs par jour
+          </h2>
         </div>
       </div>
-    </>
-  );
+    </div>
+    <div className="p-4 flex-auto">
+      {/* Chart */}
+      <div className="relative" style={{ height: "400px" }}>
+        <canvas id="line-chart"></canvas>
+      </div>
+    </div>
+  </div>
+);
 }

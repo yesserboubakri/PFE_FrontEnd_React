@@ -1,44 +1,76 @@
-/*eslint-disable*/
-import React from "react";
+
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaCar } from "react-icons/fa6";
-// components
+import IndexDropdown from "components/Dropdowns/IndexDropdown.js";
+import logo from "../../assets/img/lhamdoula.png";
 
-import PagesDropdown from "components/Dropdowns/PagesDropdown.js";
+export default function Navbar() {
+  const [navbarOpen, setNavbarOpen] = useState(false);
 
-export default function Navbar(props) {
-  const [navbarOpen, setNavbarOpen] = React.useState(false);
+
   return (
     <>
-      <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg">
-        <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
-          <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
-            <Link
-              className=" text-lightBlue-500 text-2xl boldfont- leading-relaxed inline-block mr-4 py-2 whitespace-nowrap flex items-center text-blueGray-700 text-sm font-bold "
-              to="/"
-            >
-               <FaCar className="mr-2 text-lg text-black  text-2xl" />
-              <div className="text-black"> ZoomCar </div>
+      <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 custom-navbar ">
+    
+        <div className="flex items-center justify-start w-full lg:w-auto ml-2 text-5xl" >
+          <Link to="/" className="flex items-center">
+            <img src={logo} alt="Logo" className="h-16 w-auto mr-2 " />
+          </Link>
+        </div>
 
-            </Link>
-            <button
-              className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
-              type="button"
-              onClick={() => setNavbarOpen(!navbarOpen)}
-            >
-              <i className="text-white fas fa-bars"></i>
-            </button>
-          </div>
-          <div
-            className={
-              "lg:flex flex-grow items-center bg-white lg:bg-opacity-0 lg:shadow-none" +
-              (navbarOpen ? " block rounded shadow-lg" : " hidden")
-            }
-            id="example-navbar-warning"
-          >
+       
+        <button
+          className="cursor-pointer text-xl leading-none px-3 py-1 border border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+          type="button"
+          onClick={() => setNavbarOpen(!navbarOpen)}
+        >
+          <i className="fas fa-bars"></i>
+        </button>
 
+       
+        <div
+          className={
+            "lg:flex flex-grow items-center bg-white lg:bg-opacity-0 lg:shadow-none transition-all duration-300 ease-in-out" +
+            (navbarOpen ? " block" : " hidden")
+          }
+        >
+       
 
-          </div>
+     
+          <ul className="flex flex-col lg:flex-row list-none lg:ml-auto items-center">
+        <li className="flex items-center text-xl mr-8 uppercase">
+               <Link
+                 to="/"
+                 className=""
+               >
+                 Accueil
+               </Link>
+ 
+             </li>
+                   
+            <li className="flex items-center">
+              <IndexDropdown />
+            </li>
+
+      
+            <li className="flex items-center mt-12">
+              <Link
+                to="/auth/login"
+                className="text-white text-sm px-4 py-2 flex items-center font-bold hover:text-blue-400"
+              >
+                <i className="fas fa-sign-in-alt mr-2 "></i> Login
+              </Link>
+            </li>
+
+            <li className="flex items-center mt-12">
+              <Link
+                to="/auth/register"
+                className="text-white text-sm px-4 py-2 flex items-center font-bold hover:text-blue-400"
+              >
+                <i className="fas fa-user mr-2"></i> Register
+              </Link>
+            </li>
+          </ul>
         </div>
       </nav>
     </>

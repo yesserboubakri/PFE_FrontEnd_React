@@ -1,132 +1,303 @@
-/*eslint-disable*/
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaCar, FaGasPump, FaRoad, FaCalendarAlt } from "react-icons/fa";
+import axios from "axios";
+import { FaGasPump, FaRoad, FaCalendarAlt, FaTrash, FaSearch, FaTimes, FaFilter } from "react-icons/fa";
+import { TbManualGearboxFilled } from "react-icons/tb";
+import { QRCodeCanvas } from "qrcode.react";
 
-const carAnnonces = [
-  {
-    id: 1,
-    title: "Peugeot 208 - 2020",
-    image: "data:image/jpeg;base64,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",
-    price: "€10,500",
-    mileage: "40,000 km",
-    fuel: "Essence",
-    year: 2020,
-  },
-  {
-    id: 2,
-    title: "Renault Clio 4 - 2018",
-    image: "data:image/jpeg;base64,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",
-    price: "€8,700",
-    mileage: "60,000 km",
-    fuel: "Diesel",
-    year: 2018,
-  },
-  {
-    id: 3,
-    title: "Volkswagen Golf 7,5 - 2019",
-    image: "data:image/jpeg;base64,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",
-    price: "€13,200",
-    mileage: "50,000 km",
-    fuel: "Essence",
-    year: 2019,
-  },
-];
 import IndexNavbar from "components/Navbars/IndexNavbar.js";
 import Footer from "components/Footers/Footer.js";
 
 export default function Index() {
+  const [cars, setCars] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const carsPerPage = 9;
+
+  const user = JSON.parse(localStorage.getItem("user_9antra"));
+
+  const handleDeleteCar = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/car/deleteCarById/${id}`);
+      setCars(cars.filter((car) => car._id !== id));
+    } catch (error) {
+      console.error("Erreur lors de la suppression :", error);
+    }
+  };
+
+  const getCars = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/car/getAllCars");
+      setCars(res.data);
+    } catch (error) {
+      console.error("Failed to fetch cars", error);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchTerm('');
+    setCurrentPage(1);
+  };
+
+  const handleQuickSearch = (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    getCars();
+  }, []);
+
+  // Filtres la liste selon la recherche
+  const filteredCars = cars.filter(car =>
+    car.model?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (car.marque?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (car.Annee?.toString().includes(searchTerm))
+  );
+
+  // Pagination
+  const indexOfLastCar = currentPage * carsPerPage;
+  const indexOfFirstCar = indexOfLastCar - carsPerPage;
+  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
+  const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Extract unique brands and years for quick search tags
+  const uniqueBrands = [...new Set(cars.map(car => car.marque).filter(Boolean))].slice(0, 4);
+  const currentYear = new Date().getFullYear();
+  const recentYears = [currentYear, currentYear - 1, currentYear - 2];
+
   return (
     <>
       <IndexNavbar fixed />
-      
-      <section className="header relative pt-16 items-center flex h-screen max-h-860-px">
-        <div className="container mx-auto items-center flex flex-wrap">
-          <div className="w-full md:w-8/12 lg:w-6/12 xl:w-6/12 px-4">
-            <div className="pt-32 sm:pt-0">
-              <h2 className="font-semibold text-4xl text-blueGray-600">
-                <div className="text-lightBlue-500"> Welcome to awer site "Zoom Car"</div>
-              </h2>
-              <p className="mt-4 text-lg leading-relaxed text-blueGray-500">
-                ZoomCar is your trusted online destination for buying and selling cars — fast, simple, and stress-free. Whether you're looking to upgrade your ride, find your first car, or sell your current one, ZoomCar connects buyers and sellers in just a few clicks.
+      <div
+        className="min-h-screen bg-cover bg-center relative"
+        style={{ backgroundColor: "#f2e9d0" }}
+      >
+        <div className="absolute inset-0" style={{ backgroundColor: 'rgba(172, 198, 170, 0.5)' }} />
+        <div className="absolute inset-0 bg-black bg-opacity-40" />
 
-                With an easy-to-use platform, powerful search tools, and smart features, ZoomCar makes the process smooth from start to finish.
-
-                List your car, explore thousands of options, or just browse around — at ZoomCar, your next ride is always just a zoom away.
-              </p>
-
-            </div>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 mb-10 mt-20">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4"></div>
           </div>
-        </div>
-      </section>
-    
-      <section className="pb-16 bg-blueGray-200 relative pt-32">
-        <div
-          className="-mt-20 top-0 bottom-auto left-0 right-0 w-full absolute h-20"
-          style={{ transform: "translateZ(0)" }}
-        >
-          <svg
-            className="absolute bottom-0 overflow-hidden"
-            xmlns="http://www.w3.org/2000/svg"
-            preserveAspectRatio="none"
-            version="1.1"
-            viewBox="0 0 2560 100"
-            x="0"
-            y="0"
-          >
-            <polygon
-              className="text-blueGray-200 fill-current"
-              points="2560 0 2560 100 0 100"
-            ></polygon>
-          </svg>
-        </div>
 
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap -mx-4">
-            {carAnnonces.map((car) => (
-              <div
-                key={car.id}
-                className="w-full md:w-6/12 lg:w-4/12 px-4 mb-8"
-              >
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <img
-                    src={car.image}
-                    alt={car.title}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-xl font-bold text-blueGray-700 mb-2">
-                      {car.title}
-                    </h3>
-                    <p className="text-orange-500 font-semibold text-lg mb-2">
-                      {car.price}
-                    </p>
-                    <div className="flex flex-wrap text-sm text-blueGray-600 mb-2">
-                      <div className="flex items-center mr-4">
-                        <FaRoad className="mr-1" /> {car.mileage}
-                      </div>
-                      <div className="flex items-center mr-4">
-                        <FaGasPump className="mr-1" /> {car.fuel}
-                      </div>
-                      <div className="flex items-center">
-                        <FaCalendarAlt className="mr-1" /> {car.year}
+          <section className="pb-16 bg-transparent relative pt-16">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-10 animate-slide-fade-in">
+                <h2 className="text-5xl font-extrabold text-gray-900 mb-2 uppercase tracking-wide">
+                  Occasions à la une
+                </h2>
+                <p className="text-lg text-black font-medium mt-4 mb-2 uppercase">
+                  Un grand choix de voitures d'occasion
+                </p>
+              </div>
+
+            <div className="w-full max-w-2xl mx-auto px-4 py-8">
+  <div className="relative flex items-center">
+ 
+ 
+    {/* Input */}
+    <input
+      type="text"
+      placeholder=" Rechercher une voiture ( modèle, année...)"
+      value={searchTerm}
+      onChange={e => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+      }}
+      className="
+        w-full 
+        py-4
+        pl-12
+        pr-24
+        rounded-full
+        bg-white
+        text-lg
+        font-medium
+        text-black
+        placeholder-gray-400
+        shadow-xl
+        outline-none
+        focus:ring-2
+        focus:ring-blue-400
+        transition
+        duration-200
+        border-0
+      "
+      style={{
+        boxShadow: '0 4px 18px rgba(60,60,80,0.08)',
+        border: 'none'
+      }}
+    />
+    {/* Clear Button */}
+    {searchTerm && (
+      <button
+        onClick={clearSearch}
+        className="absolute right-16 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-600 transition-colors duration-200 rounded-full p-2 bg-white"
+        style={{ boxShadow: '0 1px 4px rgba(60,60,80,0.07)' }}
+      >
+        <FaTimes className="w-5 h-5" />
+      </button>
+    )}
+    {/* Search Button */}
+    <button 
+      className=" ml-280 absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-600 hover:bg-red-700 px-4 py-3 transition-colors duration-200 flex items-center justify-center rounded-full shadow-lg"
+      type="button"
+      style={{ backgroundColor: "#ae0b0b" }}
+    >
+      <FaSearch className="w-5 h-5 text-white" />
+    </button>
+  </div>
+</div>
+
+              <div className="flex flex-wrap -mx-4 mt-8">
+                {currentCars.length === 0 ? (
+                  <div className="w-full text-center text-gray-600 mt-10">
+                    <div className="bg-white rounded-lg shadow-lg p-8 mx-auto max-w-md">
+                      <FaSearch className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                      <p className="text-xl font-semibold text-gray-800 mb-2">Aucune voiture trouvée</p>
+                      <p className="text-gray-600 mb-4">
+                        {searchTerm ? `Aucun résultat pour "${searchTerm}"` : "Aucune voiture disponible pour le moment"}
+                      </p>
+                      {searchTerm && (
+                        <button
+                          onClick={clearSearch}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200"
+                        >
+                          Effacer la recherche
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  currentCars.map((car) => (
+                    <div
+                      key={car._id}
+                      className="w-full md:w-6/12 lg:w-4/12 px-4 mb-8 mt-2"
+                    >
+                      <div
+                        style={{ backgroundColor: "#dee1ec" }}
+                        className="bg-white rounded-lg overflow-hidden soft-hover-effect front-shadow transform transition-transform duration-200 hover:scale-105"
+                      >
+                        <img
+                          src={`http://localhost:5000/files/${car.Car_image[0]}`}
+                          alt={car.model}
+                          className="w-full h-kk object-cover"
+                        />
+
+                        <div className="p-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex flex-col items-start">
+                              <h3 className="text-xl font-bold text-black mb-1 uppercase">{car.model}</h3>
+                              <p className="text-orange-500 font-semibold text-lg">{car.prix} DT</p>
+                              {(user?.role === "admin" || user?._id === car.owner) && (
+                                <button
+                                  onClick={() => handleDeleteCar(car._id)}
+                                  className="mt-2 bg-red-600 text-white rounded-full p-2 shadow hover:bg-red-700 hover:scale-110 transition-all duration-200"
+                                  title="Supprimer"
+                                >
+                                  <FaTrash size={16} />
+                                </button>
+                              )}
+                            </div>
+                            <div className="flex flex-col items-center mr-8 mt-6">
+                              <QRCodeCanvas
+                                value={`http://localhost:3000/profile/${car._id}`}
+                                size={70}
+                                bgColor="#ffffff"
+                                fgColor="#000000"
+                                level="H"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap text-sm text-black my-4 space-x-4">
+                            <div className="flex items-center mr-4">
+                              <FaRoad className="mr-1" /> {car.kilometrage} KM
+                            </div>
+                            <div className="flex items-center mr-4">
+                              <FaGasPump className="mr-1" /> {car.fuel}
+                            </div>
+                            <div className="flex items-center mr-4">
+                              <FaCalendarAlt className="mr-1" /> {car.Annee}
+                            </div>
+                            <div className="flex items-center mr-4">
+                              <TbManualGearboxFilled className="mr-1" /> {car.boite}
+                            </div>
+                          </div>
+
+                          <Link to={`/profile/${car._id}`}>
+                            <button
+                              style={{ backgroundColor: "#ae0b0b" }}
+                              className="mt-2 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full transition duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
+                            >
+                              Voir l'annonce
+                            </button>
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                    <Link to={`/car/${car.id}`}>
-                      <button className="mt-2 bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold py-2 px-4 rounded w-full">
-                        Voir l'annonce
-                      </button>
-                    </Link>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
+              {/* ---- Enhanced Pagination ---- */}
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center space-x-3 mt-8">
+                  <button
+                    onClick={() => paginate(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded-md font-semibold transition-all duration-200 ${
+                      currentPage === 1
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:scale-105"
+                    }`}
+                  >
+                    Précédent
+                  </button>
+                  
+                  {[...Array(totalPages)].map((_, i) => {
+                    const page = i + 1;
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => paginate(page)}
+                        className={`px-4 py-2 rounded-md font-semibold transition-all duration-200 transform hover:scale-105 ${
+                          currentPage === page
+                            ? "text-white shadow-lg"
+                            : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                        }`}
+                        style={currentPage === page ? { 
+                          background: "linear-gradient(135deg, #ae0b0b 0%, #d41515 100%)",
+                          boxShadow: "0 4px 15px rgba(174, 11, 11, 0.3)"
+                        } : {}}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                  
+                  <button
+                    onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded-md font-semibold transition-all duration-200 ${
+                      currentPage === totalPages
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:scale-105"
+                    }`}
+                  >
+                    Suivant
+                  </button>
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
+      </div>
       <Footer />
     </>
   );
 }
-;

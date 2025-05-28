@@ -2,45 +2,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import IndexDropdown from "components/Dropdowns/IndexDropdown.js";
-import { FaSearch } from "react-icons/fa";
-import { FaCar } from "react-icons/fa6";
-import logo from "../../assets/img/logo5.png"
+import logo from "../../assets/img/lhamdoula.png";
 
 export default function Navbar(props) {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    // Vous pouvez appeler une fonction ici pour gérer la recherche
-    // props.onSearch && props.onSearch(e.target.value);
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (props.onSearch) {
+      props.onSearch(value);
+    }
   };
 
   return (
     <>
-   <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 bg-black">
+      <nav className="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 custom-navbar">
+        <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start items-center">
+          <Link to="/" className="flex items-center xl ml-2">
+            <img src={logo} alt="Logo" className="h-20 w-auto mr-2 text-3xl"    />
+          </Link>
 
-
-
-   <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start items-center">
-  {/* Logo as a clickable image */}
-  <Link to="/" className="flex items-center">
-    <img
-       src={logo}  // Replace with your logo image path
-      alt="Logo"
-      className="h-10 w-auto mr-2" // You can adjust the size as needed
-    />
-  </Link>
-
-  {/* Title (optional, if you still want text next to the logo) */}
-  <Link
-    to="/"
-    className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors duration-300"
-  >
- 
-  </Link>
-
-          {/* Bouton hamburger */}
           <button
             className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
             type="button"
@@ -57,58 +40,54 @@ export default function Navbar(props) {
           }
           id="example-navbar-warning"
         >
-
-          {/* Barre de recherche */}
-          <form className="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3">
-            <div className="relative flex w-full flex-wrap items-stretch">
-              <span className="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
-                <i className="fas fa-search"></i>
-              </span>
-              <input
-                type="text"
-                placeholder="Search here..."
-                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10 "
-              />
-            </div>
-          </form>
+    
           <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+            
+
+            
+            <li className="flex items-center text-xl mr-8 uppercase">
+              <Link
+                to="/"
+                className=""
+              >
+                Accueil
+              </Link>
+
+            </li>
+                  <li className="flex items-center text-xl mr-4 uppercase">
+              <Link
+                to="/MonEspace"
+                className=""
+              >
+                Mon Espace
+              </Link>
+              
+            </li>
+
             <li className="flex items-center">
               <IndexDropdown />
             </li>
-            <li className="flex items-center">
-              <a
-                className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                href="https://www.facebook.com/yesser.boubakri.31?locale=fr_FR"
-                target="_blank"
+
+            <li className="flex items-center mt-12">
+              <Link
+                to="/auth/login"
+                className="text-white text-sm px-3 py-2 flex items-center font-bold hover:text-blue-400"
               >
-                <i className="text-blueGray-400 fab fa-facebook text-lg leading-lg " />
-                <span className="lg:hidden inline-block ml-2">Share</span>
-              </a>
-            </li>
-            <li className="flex items-center">
-              <a
-                className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                href="https://x.com/BoubakriYesser"
-                target="_blank"
-              >
-                <i className="text-blueGray-400 fab fa-twitter text-lg leading-lg " />
-                <span className="lg:hidden inline-block ml-2">Tweet</span>
-              </a>
-            </li>
-            <li className="flex items-center">
-              <a
-                className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                href="https://github.com/creativetimofficial/notus-react?ref=nr-index-navbar"
-                target="_blank"
-              >
-                <i className="text-blueGray-400 fab fa-github text-lg leading-lg " />
-                <span className="lg:hidden inline-block ml-2">Star</span>
-              </a>
+                <i className="fas fa-sign-in-alt mr-2"></i> Login
+              </Link>
             </li>
 
+            <li className="flex items-center mt-12">
+              <Link
+                to="/auth/register"
+                className="text-white text-sm px-3 py-2 flex items-center font-bold hover:text-blue-400"
+              >
+                <i className="fas fa-user mr-2"></i> Register
+              </Link>
+            </li>
+           
           </ul>
         </div>
-
       </nav>
     </>
   );

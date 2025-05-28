@@ -6,31 +6,31 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/styles/tailwind.css";
 
 // layouts
-
 import Admin from "layouts/Admin.js";
 import Auth from "layouts/Auth.js";
 
 // views without layouts
-
-import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import Index from "views/Index.js";
-import Annonces from "views/Annonces.js";
-
+import MonEspace from "views/MonEspace.js";
+import ChatPage from "views/ChatPage.js";
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      {/* add routes with layouts */}
+
       <Route path="/admin" component={Admin} />
       <Route path="/auth" component={Auth} />
-      
-      {/* add routes without layouts */}
-      <Route path="/landing" exact component={Landing} />
+
+
       <Route path="/profile" exact component={Profile} />
+      <Route path="/profile/:id" component={Profile} />
+
       <Route path="/" exact component={Index} />
-      <Route path="/Annonces" exact component={Annonces} />
-      {/* add redirect for first page */}
+      <Route path="/MonEspace" exact component={MonEspace} />
+      <Route path="/chat/:carId/:userId/:sellerId" component={ChatPage} />
+
+
       <Redirect from="*" to="/" />
     </Switch>
   </BrowserRouter>,
