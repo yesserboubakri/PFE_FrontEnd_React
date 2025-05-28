@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import axios from 'axios';
 import { getAllUsers } from "services/ApiUser";
 import { deleteUserById } from "services/ApiUser";
 import { addUserClient } from "services/ApiUser";
@@ -58,30 +58,30 @@ export default function CardTable({ color }) {
     setNewUser({ ...newUser, [name]: value });
     console.log(newUser);
   };
+const AjouterUser = async () => {
+  try {
+    const data = {
+      username: newUser.username,
+      email: newUser.email,
+      password: newUser.password,
+      age: newUser.age,
+      role: newUser.role || 'client'
+    };
 
-  const AjouterUser = async () => {
-    try {
-      console.log("test123")
-      const data1= new FormData();
-      data1.append("username", newUser.username);
-      data1.append("email", newUser.email);
-      data1.append("password", newUser.password);
-      data1.append("age", newUser.age);
-      data1.append("role", newUser.role || 'client');
-      console.log(data1.email)
-      console.log(newUser.email)
+    const url =
+      newUser.role === 'admin'
+        ? 'http://localhost:5000/users/addUserAdmin'
+        : 'http://localhost:5000/users/addUserClient';
 
+    const response = await axios.post(url, data);
 
-      if (newUser.role === "client") {
-        await addUserClient(data1);
-      } else if (newUser.role === "admin") {
-        await addUserAdmin(data1);
-      }
-      getUsers();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    console.log('Utilisateur ajouté :', response.data);
+    
+getUsers(); // rafraîchir la liste
+  } catch (error) {
+    console.error('Erreur lors de l’ajout de l’utilisateur :', error.response?.data || error.message);
+  }
+};
 
   return (
     <>

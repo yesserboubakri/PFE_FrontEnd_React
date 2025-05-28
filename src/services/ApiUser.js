@@ -14,9 +14,7 @@
 
     
 export async function addUserClient(data) {
-  return await axios.post(`${apiurl}/addUserClient`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  return await axios.post(`http://localhost:5000/users/addUserClient`, data);
 }
 
 export async function addUserAdmin(data) {

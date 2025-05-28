@@ -3,11 +3,6 @@ import axios from 'axios';
 const apiUrl = 'http://localhost:5000/messages'; 
 
 
-
-
-
-
-
 export async function sendMessage(data) {
   try {
     const res = await axios.post(apiUrl, data);

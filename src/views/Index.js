@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { FaGasPump, FaRoad, FaCalendarAlt, FaTrash, FaSearch, FaTimes, FaFilter } from "react-icons/fa";
+import { FaGasPump, FaRoad, FaCalendarAlt, FaTrash, FaSearch, FaTimes, } from "react-icons/fa";
 import { TbManualGearboxFilled } from "react-icons/tb";
 import { QRCodeCanvas } from "qrcode.react";
 
@@ -49,14 +49,12 @@ export default function Index() {
     getCars();
   }, []);
 
-  // Filtres la liste selon la recherche
   const filteredCars = cars.filter(car =>
     car.model?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (car.marque?.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (car.Annee?.toString().includes(searchTerm))
   );
-
-  // Pagination
+//paget
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
   const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
@@ -64,7 +62,6 @@ export default function Index() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Extract unique brands and years for quick search tags
   const uniqueBrands = [...new Set(cars.map(car => car.marque).filter(Boolean))].slice(0, 4);
   const currentYear = new Date().getFullYear();
   const recentYears = [currentYear, currentYear - 1, currentYear - 2];
